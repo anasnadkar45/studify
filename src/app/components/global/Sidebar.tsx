@@ -35,7 +35,7 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="flex flex-col h-screen w-[260px] bg-card border-r">
+    <div className="hidden md:flex flex-col h-screen w-[260px] bg-card border-r">
       <div className="flex items-center border-b h-16 gap-3 p-4">
         <div className="flex p-1 items-center justify-center rounded-lg bg-teal-500">
           <Image src={Logo} alt="Studify" className="size-8" />

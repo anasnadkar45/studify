@@ -17,7 +17,7 @@ body {
     --popover: 0 0% 99%;
     --popover-foreground: 0 0% 5%;
 
-    --primary: 174 60% 75%;
+    --primary: 173 80% 40%;
     --primary-foreground: 0 0% 2%;
 
     --secondary: 0 0% 95%;
@@ -49,7 +49,7 @@ body {
     --popover: 180 3% 6%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 174 60% 75%;
+    --primary: 173 80% 40%;
     --primary-foreground: 0 0% 2%;
 
     --secondary: 180 2% 12%;
@@ -66,7 +66,7 @@ body {
 
     --border: 180 2% 12%;
     --input: 180 2% 18%;
-    --ring: 174 60% 40%;
+    --ring: 173 80% 40%;
   }
 }
 

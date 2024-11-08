@@ -10,3 +10,7 @@ export const studyPlanSchema = z.object({
     // .object({})
     // .passthrough() // To allow any kind of content in the JSON
 });
+
+export const deleteStudyPlanSchema = z.object({
+    studyPlanId: z.string().nonempty("Study Plan ID is required"),
+});

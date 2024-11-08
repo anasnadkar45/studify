@@ -1,3 +1,4 @@
+import { StudyPlanCard } from '@/app/components/study-plan/StudyPlanCard';
 import prisma from '@/app/lib/db';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -37,18 +38,7 @@ const page = async () => {
       </div>
       <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
         {data.map((plan) => (
-          <Card key={plan.id}>
-            <CardHeader>
-              <CardTitle>
-                {plan.title}
-              </CardTitle>
-            </CardHeader>
-            <CardFooter>
-              <Link href={`/study-plan/${plan.id}`}>
-                <Button>Show Study Plan</Button>
-              </Link>
-            </CardFooter>
-          </Card>
+          <StudyPlanCard plan={plan}/>
         ))}
       </div>
     </div>

@@ -9,6 +9,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Progress } from "@/components/ui/progress"
 
 interface Plan {
   id: string
@@ -48,11 +49,13 @@ interface StudyPlanProps {
   plan: Plan
 }
 
-export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
+export const StudyPlan = ({ plan }:StudyPlanProps) => {
   const [studyPlan, setStudyPlan] = useState<StudyPlanData | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
   const [filterType, setFilterType] = useState<string>("all")
+  const [completedDays, setCompletedDays] = useState<number[]>([])
+  console.log(completedDays)
 
   useEffect(() => {
     const rawContent = plan.content
@@ -102,7 +105,27 @@ export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
           return b.question.localeCompare(a.question)
         }
       })
-  }, [studyPlan, searchTerm, sortOrder, filterType])
+  }, [studyPlan, searchTerm, sortOrder, filterType]);
+
+  const toggleDayCompletion = (day: number) => {
+    setCompletedDays((prevCompletedDays) => {
+      if (prevCompletedDays.includes(day)) {
+        return prevCompletedDays.filter((d) => d !== day)
+      } else {
+        return [...prevCompletedDays, day]
+      }
+    })
+  }
+
+  const progressPercentage = useMemo(() => {
+    if (!studyPlan) return 0
+    const totalDays = studyPlan.studyPlan.dailySessions.length
+    return Math.round((completedDays.length / totalDays) * 100)
+  }, [studyPlan, completedDays])
+
+  if (!studyPlan) {
+    return <div className="text-center p-8">Loading study plan...</div>
+  }
 
   if (!studyPlan) {
     return <div className="text-center p-8">Loading study plan...</div>
@@ -111,6 +134,16 @@ export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h1 className="text-4xl font-bold mb-8 text-center">{plan.title}</h1>
+
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="text-2xl">Study Plan Progress</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Progress value={progressPercentage} className="w-full" />
+          <p className="text-center mt-2">{progressPercentage}% Complete</p>
+        </CardContent>
+      </Card>
 
       <Card className="mb-8">
         <CardHeader>
@@ -150,7 +183,18 @@ export const StudyPlan: React.FC<StudyPlanProps> = ({ plan }) => {
             {filteredAndSortedSessions.map((session, index) => (
               <AccordionItem key={index} value={`day-${session.day}`}>
                 <AccordionTrigger className="text-xl font-semibold">
-                  Day {session.day}
+                  <div className="flex items-center justify-between w-full">
+                    <span>Day {session.day}</span>
+                    <Button
+                      variant={completedDays.includes(session.day) ? "default" : "outline"}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleDayCompletion(session.day)
+                      }}
+                    >
+                      {completedDays.includes(session.day) ? "Completed" : "Mark as Complete"}
+                    </Button>
+                  </div>
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-4">

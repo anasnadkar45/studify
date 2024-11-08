@@ -75,8 +75,7 @@ export default function StudyPlanDashboard() {
               <p className="text-sm text-right mt-1">{plan.progress}% Complete</p>
             </CardContent>
             <CardFooter>
-              <Button 
-                variant="outline" 
+              <Button  
                 className="w-full"
                 onClick={() => router.push(`/study-plan/${plan.id}`)}
               >
