@@ -7,35 +7,41 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function StudyPlanAction(prevState: any, formData: FormData) {
-    const {getUser} = getKindeServerSession();
-    const user = await getUser();
+    const { getUser } = getKindeServerSession()
+    const user = await getUser()
 
-    // Validate the form data using Zod schema
     const submission = parseWithZod(formData, {
         schema: studyPlanSchema,
-    });
+    })
 
-    // If validation fails, return the errors
     if (submission.status !== "success") {
-        return submission.reply();
+        return submission.reply()
     }
 
-    // Extract the validated data
-    const { title,content } = submission.value;
+    const { title, content } = submission.value
 
-    // Create a new study plan in the database
-    await prisma.studyPlan.create({
-        data: {
-            title: title,
-            content: content,  // Assuming `content` is already in a JSON format
-            userId: user.id,  // Link to the currently logged-in user
-        }
-    });
+    try {
+        // Parse the content string into a JSON object
+        const parsedContent = JSON.parse(content)
 
-    // Redirect to the study plan overview page after successful creation
-    return redirect("/study-plan");
+        // Create a new study plan in the database
+        await prisma.studyPlan.create({
+            data: {
+                title,
+                content: parsedContent, // Prisma will handle the JSON conversion
+                userId: user.id,
+            }
+        })
+
+        revalidatePath("/study-plan")
+    } catch (error) {
+        console.error("Error creating study plan:", error)
+        return submission.reply({
+            formErrors: ["Failed to create study plan. Please try again."]
+        })
+    }
+    return redirect("/study-plan")
 }
-
 
 export async function DeleteStudyPlanAction(prevState: any, formData: FormData) {
     const { getUser } = getKindeServerSession();

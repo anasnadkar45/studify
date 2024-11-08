@@ -13,13 +13,14 @@ import { studyPlanSchema } from "@/app/lib/zodSchemas"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { SubmitButton } from "@/app/components/global/SubmitButton"
+import { Textarea } from "@/components/ui/textarea"
 
 const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
 export default function StudyPlanBuilder() {
     const [file, setFile] = useState<File | null>(null)
     const [uploading, setUploading] = useState<boolean>(false)
-    const [studyPlan, setStudyPlan] = useState<string>('')
+    const [studyPlan, setStudyPlan] = useState<string>('');
     const [title, setTitle] = useState<string>("")
     const [filetype, setFileType] = useState<string>("")
     const [lastResult, action] = useActionState(StudyPlanAction, undefined)
@@ -140,13 +141,20 @@ export default function StudyPlanBuilder() {
 
             const result = await model.generateContent([prompt, ...imageParts])
             const response = await result.response
-            let text = await response.text()
-
-            setStudyPlan(text)
-            setFile(null)
-            setFileType("")
-            toast.success("Study plan generated successfully!")
-            setUploading(false)
+            const rawContent = await response.text()
+            // Clean the content and parse it to ensure it's valid JSON
+            const cleanedContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim()
+            try {
+                // Validate that it's proper JSON
+                const parsedJson = JSON.parse(cleanedContent)
+                setStudyPlan(cleanedContent) // Store the cleaned JSON string
+                setFile(null)
+                setFileType("")
+                toast.success("Study plan generated successfully!")
+            } catch (error) {
+                console.error("Invalid JSON received:", error)
+                toast.error("Error: Invalid study plan format received")
+            }
         } catch (error) {
             console.error("Error uploading file:", error)
             toast.error("Error generating study plan. Please try again.")
@@ -181,6 +189,7 @@ export default function StudyPlanBuilder() {
                             )}
                         </div>
 
+
                         <div className="space-y-2">
                             <Label htmlFor="content">Upload PDF</Label>
                             <div className="flex items-center justify-center w-full">
@@ -214,7 +223,7 @@ export default function StudyPlanBuilder() {
                         <Input
                             type="hidden"
                             name={fields.content.name}
-                            defaultValue={fields.content.initialValue}
+                            defaultValue={fields.content.initialValue as string}
                             key={fields.content.key}
                             value={studyPlan}
                         />

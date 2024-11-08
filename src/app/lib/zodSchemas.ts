@@ -7,9 +7,19 @@ export const studyPlanSchema = z.object({
         .max(50, { message: "Title must be no longer than 50 characters" }),
     content: z
         .string()
-    // .object({})
-    // .passthrough() // To allow any kind of content in the JSON
-});
+        .min(1, { message: "Content is required" })
+        .refine(
+            (value) => {
+                try {
+                    JSON.parse(value)
+                    return true
+                } catch {
+                    return false
+                }
+            },
+            { message: "Content must be valid JSON" }
+        ),
+})
 
 export const deleteStudyPlanSchema = z.object({
     studyPlanId: z.string().nonempty("Study Plan ID is required"),

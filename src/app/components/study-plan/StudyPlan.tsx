@@ -59,14 +59,7 @@ export const StudyPlan = ({ plan }:StudyPlanProps) => {
 
   useEffect(() => {
     const rawContent = plan.content
-    const cleanedContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim()
-
-    try {
-      const jsonData: StudyPlanData = JSON.parse(cleanedContent)
-      setStudyPlan(jsonData)
-    } catch (error) {
-      console.error("Error parsing JSON:", error)
-    }
+    setStudyPlan(rawContent)
   }, [plan.content])
 
   const filteredAndSortedSessions = useMemo(() => {

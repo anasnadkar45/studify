@@ -38,7 +38,7 @@ const page = async () => {
       </div>
       <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2'>
         {data.map((plan) => (
-          <StudyPlanCard plan={plan}/>
+          <StudyPlanCard key={plan.id} plan={plan}/>
         ))}
       </div>
     </div>
