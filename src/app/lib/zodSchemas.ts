@@ -24,3 +24,7 @@ export const studyPlanSchema = z.object({
 export const deleteStudyPlanSchema = z.object({
     studyPlanId: z.string().nonempty("Study Plan ID is required"),
 });
+
+export const publishStudyPlanSchema = z.object({
+    studyPlanId: z.string().nonempty("Study Plan ID is required"),
+})

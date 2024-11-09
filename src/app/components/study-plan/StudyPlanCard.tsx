@@ -1,6 +1,5 @@
 "use client"
 
-import { DeleteStudyPlanAction } from '@/app/action'
 import { deleteStudyPlanSchema } from '@/app/lib/zodSchemas'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,7 +8,7 @@ import { parseWithZod } from '@conform-to/zod'
 import Link from 'next/link'
 import { SubmitButton } from '../global/SubmitButton'
 import { useActionState, useState } from 'react'
-import { BookOpen, MoreVertical, Trash2 } from 'lucide-react'
+import { BookOpen, Clock, MoreVertical, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
@@ -17,10 +16,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { DeleteStudyPlanAction } from '@/app/action'
 
 interface PlanData {
   id: string
   title: string
+  updatedAt: Date
 }
 
 interface PlanProps {
@@ -39,7 +40,7 @@ export const StudyPlanCard = ({ plan }: PlanProps) => {
 
 
   return (
-    <Card key={plan.id} className="flex flex-col h-full transition-all duration-300 hover:shadow-lg">
+    <Card key={plan.id} className="flex flex-col justify-between h-full transition-all duration-300 hover:shadow-lg">
       <CardHeader className="flex flex-col space-y-1.5">
         <div className="flex justify-between items-center">
           <CardTitle className="text-2xl font-bold text-primary">{plan.title}</CardTitle>
@@ -63,11 +64,16 @@ export const StudyPlanCard = ({ plan }: PlanProps) => {
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardFooter className="pt-4 bg-zinc-800/50 rounded-b-lg">
+      <CardContent>
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
+          <Clock className="h-4 w-4" />
+          <span>Last updated {new Date(plan.updatedAt).toLocaleDateString()}</span>
+        </div>
+      </CardContent>
+      <CardFooter>
         <Link href={`/study-plan/${plan.id}`} className="w-full">
-          <Button className="w-full" size="lg">
-            <BookOpen className="mr-2 h-5 w-5" />
-            View Study Plan
+          <Button className="w-full">
+            <BookOpen className="mr-2 h-4 w-4" /> View Plan
           </Button>
         </Link>
       </CardFooter>
@@ -82,7 +88,7 @@ export const StudyPlanCard = ({ plan }: PlanProps) => {
           name="studyPlanId"
           value={plan.id}
         />
-        <SubmitButton 
+        <SubmitButton
           text="Delete"
           variant="ghost"
           className="hidden"

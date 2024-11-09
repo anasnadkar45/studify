@@ -6,7 +6,6 @@ import { CircleDashed, FileText, Upload } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { StudyPlanAction } from "@/app/action"
 import { useForm } from '@conform-to/react'
 import { parseWithZod } from "@conform-to/zod"
 import { studyPlanSchema } from "@/app/lib/zodSchemas"
@@ -14,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { SubmitButton } from "@/app/components/global/SubmitButton"
 import { Textarea } from "@/components/ui/textarea"
+import { StudyPlanAction } from "@/app/action"
 
 const geminiApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 

@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Crown, HomeIcon, Settings, Goal, Wallet, Receipt, BarChart3, HelpCircle, Network, BrainCircuitIcon } from 'lucide-react'
+import { Crown, HomeIcon, Settings, Goal, HelpCircle, Network, BrainCircuitIcon, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import Logo from '../../../../public/Logo.svg'
@@ -16,9 +16,7 @@ const sidebarLinks = [
       { id: 0, name: "Dashboard", href: "/dashboard", icon: HomeIcon },
       { id: 1, name: "StudyPlan", href: "/study-plan", icon: BrainCircuitIcon },
       { id: 2, name: "My Goals", href: "/goals", icon: Goal },
-      { id: 3, name: "Investment", href: "/investment", icon: Wallet },
-      { id: 4, name: "Bills and Payment", href: "/bills", icon: Receipt },
-      { id: 5, name: "Analytics and Reports", href: "/analytics", icon: BarChart3 },
+      { id: 3, name: "Community", href: "/community", icon: Globe },
     ],
   },
   {
