@@ -1,14 +1,14 @@
-import { ToastButton, ToastButton2 } from '@/app/components/global/ToastButton';
-import { StudyPlanCard } from '@/app/components/study-plan/StudyPlanCard';
-import prisma from '@/app/lib/db';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { Brain, Sparkles } from 'lucide-react';
-import { unstable_noStore as noStore } from 'next/cache'
+import { cookies } from 'next/headers'
+import { ToastButton, ToastButton2 } from '@/app/components/global/ToastButton'
+import { StudyPlanCard } from '@/app/components/study-plan/StudyPlanCard'
+import prisma from '@/app/lib/db'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+import { Brain, Sparkles } from 'lucide-react'
 
-const getData = async (userId: string) => {
-  return await prisma.studyPlan.findMany({
+async function getData(userId: string) {
+  const data = await prisma.studyPlan.findMany({
     where: { userId },
     select: {
       id: true,
@@ -18,21 +18,27 @@ const getData = async (userId: string) => {
     },
     orderBy: { updatedAt: 'desc' },
     take: 3
-  });
-};
+  })
+  return data
+}
 
 export default async function StudyPlanDashboard() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  const data = await getData(user.id as string);
-  noStore()
+  const { getUser } = getKindeServerSession()
+  const user = await getUser()
 
-  // Get the number of study plans the user has
+  if (!user || !user.id) {
+    return <div className="container mx-auto p-4">Please log in to view your study plans.</div>
+  }
+
+  const data = await getData(user.id)
   const userStudyPlansCount = await prisma.studyPlan.count({
     where: {
       userId: user.id,
     },
-  });
+  })
+
+  const cookieStore = cookies()
+  const lastCreatedPlan = (await cookieStore).get('lastCreatedPlan')
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
@@ -44,6 +50,12 @@ export default async function StudyPlanDashboard() {
           </div>
           <ToastButton userStudyPlansCount={userStudyPlansCount} />
         </header>
+
+        {lastCreatedPlan && (
+          <p className="text-sm text-muted-foreground">
+            Last created plan: {lastCreatedPlan.value}
+          </p>
+        )}
 
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader>
@@ -58,12 +70,12 @@ export default async function StudyPlanDashboard() {
                 {data.map((plan) => (
                   <StudyPlanCard key={plan.id} plan={plan} />
                 ))}
-                <ToastButton2 userStudyPlansCount={userStudyPlansCount} /> {/* Using the Client Component */}
+                <ToastButton2 userStudyPlansCount={userStudyPlansCount} />
               </div>
             </ScrollArea>
           </CardContent>
         </Card>
       </div>
     </div>
-  );
+  )
 }

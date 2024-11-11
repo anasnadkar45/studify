@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    serverActions: true,
+  },
   /* config options here */
   images: {
     remotePatterns: [

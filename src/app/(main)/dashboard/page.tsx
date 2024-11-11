@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { Clock, BookOpen, ArrowRight, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,10 +10,9 @@ import prisma from '@/app/lib/db'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { StudyPlanCard } from '@/app/components/study-plan/StudyPlanCard'
 import { ToastButton3 } from '@/app/components/global/ToastButton'
-import { unstable_noStore as noStore } from 'next/cache'
 
 async function getStudyPlans(userId: string) {
-  return await prisma.studyPlan.findMany({
+  const data = await prisma.studyPlan.findMany({
     where: { userId },
     select: {
       id: true,
@@ -23,10 +23,11 @@ async function getStudyPlans(userId: string) {
     orderBy: { updatedAt: 'desc' },
     take: 3
   })
+  return data
 }
 
 async function getRecentActivity(userId: string) {
-  return await prisma.studyPlan.findMany({
+  const data = await prisma.studyPlan.findMany({
     where: { userId },
     select: {
       id: true,
@@ -37,24 +38,27 @@ async function getRecentActivity(userId: string) {
     orderBy: { createdAt: 'desc' },
     take: 10,
   })
+  return data
 }
 
 export default async function StudyPlanDashboard() {
-  noStore()
   const { getUser } = getKindeServerSession()
   const user = await getUser()
+
+  if (!user || !user.id) {
+    return <div className="container mx-auto p-4">Please log in to view your study plans.</div>
+  }
+
+  const cookieStore = cookies()
+  const theme = (await cookieStore).get('theme')
+
+  const studyPlans = await getStudyPlans(user.id)
+  const recentActivity = await getRecentActivity(user.id)
   const userStudyPlansCount = await prisma.studyPlan.count({
     where: {
       userId: user.id,
     },
-  });
-
-  if (!user || !user.id) {
-    return <div>Please log in to view your study plans.</div>
-  }
-
-  const studyPlans = await getStudyPlans(user.id)
-  const recentActivity = await getRecentActivity(user.id)
+  })
 
   return (
     <div className="container mx-auto p-4 space-y-8">
@@ -68,6 +72,8 @@ export default async function StudyPlanDashboard() {
           <AvatarFallback>{user.given_name?.[0] ?? 'U'}</AvatarFallback>
         </Avatar>
       </header>
+
+      {theme && <p className="text-sm text-muted-foreground">Current theme: {theme.value}</p>}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <ToastButton3 userStudyPlansCount={userStudyPlansCount} />
