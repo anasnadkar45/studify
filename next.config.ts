@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  reactStrictMode: true,
+  swcMinify: true,
   /* config options here */
   images: {
     remotePatterns: [

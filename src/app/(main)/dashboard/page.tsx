@@ -9,6 +9,7 @@ import prisma from '@/app/lib/db'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { StudyPlanCard } from '@/app/components/study-plan/StudyPlanCard'
 import { ToastButton3 } from '@/app/components/global/ToastButton'
+import { unstable_noStore as noStore } from 'next/cache'
 
 async function getStudyPlans(userId: string) {
   return await prisma.studyPlan.findMany({
@@ -39,6 +40,7 @@ async function getRecentActivity(userId: string) {
 }
 
 export default async function StudyPlanDashboard() {
+  noStore
   const { getUser } = getKindeServerSession()
   const user = await getUser()
   const userStudyPlansCount = await prisma.studyPlan.count({

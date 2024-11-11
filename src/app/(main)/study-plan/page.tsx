@@ -5,8 +5,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Brain, Sparkles } from 'lucide-react';
+import { unstable_noStore as noStore } from 'next/cache'
 
 const getData = async (userId: string) => {
+  noStore
   return await prisma.studyPlan.findMany({
     where: { userId },
     select: {

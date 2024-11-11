@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Pencil, Save } from 'lucide-react'
+import { unstable_noStore as noStore } from 'next/cache'
 
 const Profile = async () => {
     const { getUser } = getKindeServerSession();
     const user = await getUser();
+    noStore
 
     if (!user) {
         return <div className="flex items-center justify-center h-screen">Loading...</div>
@@ -30,11 +31,11 @@ const Profile = async () => {
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="firstName">First Name</Label>
-                        <Input id="firstName" defaultValue={user.given_name || ''} disabled/>
+                        <Input id="firstName" defaultValue={user.given_name || ''} disabled />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name</Label>
-                        <Input id="lastName" defaultValue={user.family_name || ''} disabled/>
+                        <Input id="lastName" defaultValue={user.family_name || ''} disabled />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>

@@ -7,8 +7,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Users } from 'lucide-react'
 import { format } from 'date-fns' // Optional: use date-fns for date formatting
+import { unstable_noStore as noStore } from 'next/cache'
 
 const getCommunityStudyPlans = async () => {
+    noStore()
     const data = await prisma.community.findMany({
         include: {
             studyPlans: {

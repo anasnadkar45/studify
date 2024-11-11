@@ -1,8 +1,9 @@
 import { CommunityStudyPlan } from '@/app/components/community/CommunityStudyPlan';
 import prisma from '@/app/lib/db';
 import React from 'react';
-
+import { unstable_noStore as noStore } from 'next/cache'
 const getData = async (id: string) => {
+    noStore
     const data = await prisma.studyPlan.findUnique({
         where: {
             id: id,

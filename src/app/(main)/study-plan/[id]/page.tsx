@@ -3,8 +3,10 @@ import { StudyPlan } from '@/app/components/study-plan/StudyPlan';
 import prisma from '@/app/lib/db';
 import { Button } from '@/components/ui/button';
 import React from 'react';
+import { unstable_noStore as noStore } from 'next/cache'
 
 const getData = async (id: string) => {
+    noStore
     const data = await prisma.studyPlan.findUnique({
         where: {
             id: id,
