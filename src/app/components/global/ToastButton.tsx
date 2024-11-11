@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { redirect } from "next/navigation";
 
 interface ToastButtonProps {
     userStudyPlansCount: number;
@@ -43,6 +44,8 @@ export function ToastButton2({ userStudyPlansCount }: ToastButtonProps) {
                     onClick: () => console.log("Upgrade action triggered"),
                 },
             });
+        }else{
+          redirect('/study-plan/create')
         }
     };
 

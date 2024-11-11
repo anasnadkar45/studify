@@ -34,13 +34,13 @@ export default async function StudyPlanDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
-      <div className="container mx-auto p-6 space-y-8">
+      <div className="container mx-auto p-4 space-y-8">
         <header className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <Brain className="w-10 h-10 text-primary" />
-            <h1 className="text-4xl font-bold tracking-tight">AI Study Planner</h1>
+          <div>
+            <h1 className="text-3xl font-bold">Study Plans</h1>
+            <p className="text-muted-foreground">Manage and track your learning progress</p>
           </div>
-          <ToastButton userStudyPlansCount={userStudyPlansCount} /> {/* Using the Client Component */}
+          <ToastButton userStudyPlansCount={userStudyPlansCount} />
         </header>
 
         <Card className="bg-card/50 backdrop-blur-sm">
