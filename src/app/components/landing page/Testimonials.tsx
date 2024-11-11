@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Quote } from 'lucide-react';
+import Image from 'next/image';
 
 const testimonials = [
     {
@@ -56,9 +57,11 @@ export const Testimonials = () => {
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="relative">
                                     <div className="h-12 w-12 overflow-hidden rounded-full ring-2 ring-blue-500/20">
-                                        <img
+                                        <Image
                                             src={testimonial.avatar}
                                             alt={testimonial.author}
+                                            width={100}
+                                            height={100}
                                             className="h-full w-full object-cover"
                                         />
                                     </div>
