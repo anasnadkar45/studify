@@ -40,7 +40,7 @@ async function getRecentActivity(userId: string) {
 }
 
 export default async function StudyPlanDashboard() {
-  noStore
+  noStore()
   const { getUser } = getKindeServerSession()
   const user = await getUser()
   const userStudyPlansCount = await prisma.studyPlan.count({

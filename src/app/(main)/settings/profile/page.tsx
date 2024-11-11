@@ -9,7 +9,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 const Profile = async () => {
     const { getUser } = getKindeServerSession();
     const user = await getUser();
-    noStore
+    noStore()
 
     if (!user) {
         return <div className="flex items-center justify-center h-screen">Loading...</div>

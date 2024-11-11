@@ -10,7 +10,6 @@ import { format } from 'date-fns' // Optional: use date-fns for date formatting
 import { unstable_noStore as noStore } from 'next/cache'
 
 const getCommunityStudyPlans = async () => {
-    noStore()
     const data = await prisma.community.findMany({
         include: {
             studyPlans: {
@@ -38,7 +37,7 @@ const getCommunityStudyPlans = async () => {
 
 const Page = async () => {
     const communities = await getCommunityStudyPlans();
-
+    noStore()
     return (
         <div className="container mx-auto p-4 space-y-8">
             <header className="flex justify-between items-center">

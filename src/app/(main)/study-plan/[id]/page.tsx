@@ -6,7 +6,6 @@ import React from 'react';
 import { unstable_noStore as noStore } from 'next/cache'
 
 const getData = async (id: string) => {
-    noStore
     const data = await prisma.studyPlan.findUnique({
         where: {
             id: id,
@@ -29,6 +28,7 @@ const page = async ({
 }) => {
     const id = (await params).id
     const data = await getData(id);
+    noStore()
 
     if (!data) {
         return (

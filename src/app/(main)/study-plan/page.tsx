@@ -8,7 +8,6 @@ import { Brain, Sparkles } from 'lucide-react';
 import { unstable_noStore as noStore } from 'next/cache'
 
 const getData = async (userId: string) => {
-  noStore
   return await prisma.studyPlan.findMany({
     where: { userId },
     select: {
@@ -26,6 +25,7 @@ export default async function StudyPlanDashboard() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   const data = await getData(user.id as string);
+  noStore()
 
   // Get the number of study plans the user has
   const userStudyPlansCount = await prisma.studyPlan.count({
