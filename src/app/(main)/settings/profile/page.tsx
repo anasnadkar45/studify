@@ -1,7 +1,5 @@
-import { cookies } from 'next/headers'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,9 +11,6 @@ export default async function Profile() {
   if (!user) {
     return <div className="flex items-center justify-center h-screen">Loading...</div>
   }
-
-  const cookieStore = cookies()
-  const lastVisit = (await cookieStore).get('lastVisit')
 
   return (
     <div className="container mx-auto py-10">
@@ -43,11 +38,6 @@ export default async function Profile() {
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" defaultValue={user.email || ''} disabled />
           </div>
-          {lastVisit && (
-            <div className="text-sm text-muted-foreground">
-              Last visit: {new Date(lastVisit.value).toLocaleString()}
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>

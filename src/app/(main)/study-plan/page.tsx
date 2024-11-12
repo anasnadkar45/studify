@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import { ToastButton, ToastButton2 } from '@/app/components/global/ToastButton'
 import { StudyPlanCard } from '@/app/components/study-plan/StudyPlanCard'
 import prisma from '@/app/lib/db'
@@ -37,8 +36,6 @@ export default async function StudyPlanDashboard() {
     },
   })
 
-  const cookieStore = cookies()
-  const lastCreatedPlan = (await cookieStore).get('lastCreatedPlan')
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10">
@@ -50,12 +47,6 @@ export default async function StudyPlanDashboard() {
           </div>
           <ToastButton userStudyPlansCount={userStudyPlansCount} />
         </header>
-
-        {lastCreatedPlan && (
-          <p className="text-sm text-muted-foreground">
-            Last created plan: {lastCreatedPlan.value}
-          </p>
-        )}
 
         <Card className="bg-card/50 backdrop-blur-sm">
           <CardHeader>

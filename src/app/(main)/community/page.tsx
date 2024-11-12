@@ -1,5 +1,4 @@
 import React from 'react'
-import { cookies } from 'next/headers'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
@@ -12,12 +11,6 @@ import { format } from 'date-fns'
 import prisma from '@/app/lib/db'
 
 async function getCommunityStudyPlans() {
-  // Access cookies
-  const cookieStore = cookies()
-  const userIdCookie = (await cookieStore).get('userId')
-  
-  // Use the userId from the cookie, or null if it doesn't exist
-  const userId = userIdCookie ? userIdCookie.value : null
 
   // Fetch data from the database
   const data = await prisma.community.findMany({
@@ -43,11 +36,11 @@ async function getCommunityStudyPlans() {
     }
   })
 
-  return { data, userId }
+  return { data }
 }
 
 export default async function Page() {
-  const { data: communities, userId } = await getCommunityStudyPlans()
+  const { data: communities } = await getCommunityStudyPlans()
 
   return (
     <div className="container mx-auto p-4 space-y-8">
@@ -58,7 +51,6 @@ export default async function Page() {
           {communities.length} Communities
         </Badge>
       </header>
-      {userId && <p className="text-sm text-muted-foreground">Logged in user ID: {userId}</p>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {communities.map((community) => (
           <Card key={community.id} className="overflow-hidden transition-all hover:shadow-lg">

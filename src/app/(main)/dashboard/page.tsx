@@ -1,9 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 import { Clock, BookOpen, ArrowRight, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import prisma from '@/app/lib/db'
@@ -49,8 +47,6 @@ export default async function StudyPlanDashboard() {
     return <div className="container mx-auto p-4">Please log in to view your study plans.</div>
   }
 
-  const cookieStore = cookies()
-  const theme = (await cookieStore).get('theme')
 
   const studyPlans = await getStudyPlans(user.id)
   const recentActivity = await getRecentActivity(user.id)
@@ -72,8 +68,6 @@ export default async function StudyPlanDashboard() {
           <AvatarFallback>{user.given_name?.[0] ?? 'U'}</AvatarFallback>
         </Avatar>
       </header>
-
-      {theme && <p className="text-sm text-muted-foreground">Current theme: {theme.value}</p>}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <ToastButton3 userStudyPlansCount={userStudyPlansCount} />
