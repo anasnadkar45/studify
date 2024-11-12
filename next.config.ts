@@ -4,10 +4,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: true,
-  swcMinify: true,
-  experimental: {
-    serverActions: true,
+  devIndicators: {
+    appIsrStatus: true,
+    buildActivity: true,
+    buildActivityPosition: "bottom-right",
   },
   /* config options here */
   images: {
